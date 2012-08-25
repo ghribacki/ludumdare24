@@ -1,10 +1,10 @@
-* Ludum Dare 24: Evolution
+# Ludum Dare 24: Evolution
 
 LWJGL (lwjgl.org) and 3D Sound System (http://www.paulscode.com/forum/index.php?topic=4.0) required, not included on the project.
 LWJGL: lwjgl.jar, lwjgl_util.jar.
 3D Sound System: CodecJOgg.jar, CodecWav.jar, LibraryLWJGLOpenAL.jar, SoundSystem.jar.
 
-** MIT License
+## MIT License
 
 Copyright (C) 2012 Guilherme Haag Ribacki
 
