@@ -24,8 +24,6 @@ public class Game extends Canvas implements Runnable {
 	
 	private Scene scene;
 	
-	private Shader shader;
-	
 	public Game() {
 		Dimension size = new Dimension(WIDTH*SCALE, HEIGHT*SCALE);
 		this.setSize(size);
@@ -48,9 +46,6 @@ public class Game extends Canvas implements Runnable {
 		
 		// TODO Sound stuff (load, etc).
 		
-		// Load shaders...
-		this.shader = new Shader();
-		
 		this.setScene(new GameScene(this));
 		
 		while (this.running) {
@@ -58,16 +53,12 @@ public class Game extends Canvas implements Runnable {
 			
 			this.scene.update();
 			
-			this.shader.beginShaderProgram();
-			
 			// clear screen
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			GL11.glMatrixMode(GL11.GL_MODELVIEW);
 			GL11.glLoadIdentity();
 			
 			this.scene.render();
-			
-			this.shader.endShaderProgram();
 			
 			Display.update();
 			Display.sync(60);

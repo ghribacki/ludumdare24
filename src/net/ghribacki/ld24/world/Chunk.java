@@ -16,7 +16,7 @@ public class Chunk {
 	
 	// Renderer.
 	private int vertices;
-	private int textures;
+	//private int textures;
 	private int colors;
 	private int count;
 	
@@ -27,7 +27,12 @@ public class Chunk {
 		Random random = new Random();
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				this.cells[i][j] = random.nextInt(2);
+				int rand = random.nextInt(100);
+				if (rand < 10) {
+					this.cells[i][j] = 1;
+				} else {
+					this.cells[i][j] = 0;
+				}
 			}
 		}
 		this.modified = true;
@@ -38,11 +43,10 @@ public class Chunk {
 	}
 	
 	public void render() {
-		if (!this.modified) {
-			this.renderVbo();
-		} else {
+		if (this.modified) {
 			this.compile();
 		}
+		this.renderVbo();
 	}
 	
 	private void renderVbo() {
@@ -73,14 +77,14 @@ public class Chunk {
 		Tesselator tesselator = new Tesselator();
 		
 		ArrayList<Float> verticesList = new ArrayList<Float>();
-		ArrayList<Float> texturesList = new ArrayList<Float>();
+		//ArrayList<Float> texturesList = new ArrayList<Float>();
 		ArrayList<Float> colorsList = new ArrayList<Float>();
 		
 		for (int i = 0; i < this.size; i++) {
 			for (int j = 0; j < this.size; j++) {
 				int cellType = this.cells[i][j];
 				verticesList.addAll(tesselator.getVertices(cellType, i, j));
-				texturesList.addAll(tesselator.getTextures(cellType));
+				//texturesList.addAll(tesselator.getTextures(cellType));
 				colorsList.addAll(tesselator.getColors(cellType));
 			}
 		}
@@ -91,11 +95,11 @@ public class Chunk {
 			verts[i] = verticesList.get(i);
 		}
 		
-		int countT = texturesList.size();
+		/*int countT = texturesList.size();
 		float[] texts = new float[countT];
 		for (int i = 0; i < countT; i++) {
 			texts[i] = texturesList.get(i);
-		}
+		}*/
 		
 		int countC = colorsList.size();
 		float[] cols = new float[countC];
@@ -106,35 +110,40 @@ public class Chunk {
 		// The real thing.
 		
 		FloatBuffer verticesBuffer;
-		FloatBuffer texturesBuffer;
+		//FloatBuffer texturesBuffer;
 		FloatBuffer colorsBuffer;
 		
 		verticesBuffer = BufferUtils.createFloatBuffer(this.count);
 		verticesBuffer.put(verts).flip();
-		texturesBuffer = BufferUtils.createFloatBuffer(texturesList.size());
-		texturesBuffer.put(texts).flip();
+		/*texturesBuffer = BufferUtils.createFloatBuffer(texturesList.size());
+		texturesBuffer.put(texts).flip();*/
 		colorsBuffer = BufferUtils.createFloatBuffer(colorsList.size());
 		colorsBuffer.put(cols).flip();
 		
 		ARBVertexBufferObject.glDeleteBuffersARB(this.vertices);
-		ARBVertexBufferObject.glDeleteBuffersARB(this.textures);
+		//ARBVertexBufferObject.glDeleteBuffersARB(this.textures);
 		ARBVertexBufferObject.glDeleteBuffersARB(this.colors);
 		
 		this.vertices = ARBVertexBufferObject.glGenBuffersARB();
-		this.textures = ARBVertexBufferObject.glGenBuffersARB();
+		//this.textures = ARBVertexBufferObject.glGenBuffersARB();
 		this.colors = ARBVertexBufferObject.glGenBuffersARB();
 
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, this.vertices);
 		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, verticesBuffer, ARBVertexBufferObject.GL_DYNAMIC_DRAW_ARB);
-		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, this.textures);
-		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, texturesBuffer, ARBVertexBufferObject.GL_DYNAMIC_DRAW_ARB);
+		//ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, this.textures);
+		//ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, texturesBuffer, ARBVertexBufferObject.GL_DYNAMIC_DRAW_ARB);
 		ARBVertexBufferObject.glBindBufferARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, this.colors);
 		ARBVertexBufferObject.glBufferDataARB(ARBVertexBufferObject.GL_ARRAY_BUFFER_ARB, colorsBuffer, ARBVertexBufferObject.GL_DYNAMIC_DRAW_ARB);
 		
 		verticesBuffer.clear();
-		texturesBuffer.clear();
+		//texturesBuffer.clear();
 		colorsBuffer.clear();
 		
 		this.modified = false;
+	}
+	
+	public void setCell(int x, int y, int type) {
+		this.cells[x][y] = type;
+		this.modified = true;
 	}
 }

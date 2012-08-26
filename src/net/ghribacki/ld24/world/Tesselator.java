@@ -119,7 +119,7 @@ public class Tesselator {
 	
 	/** Textures **/
 
-	public List<Float> getTextures(int type) {
+	/*public List<Float> getTextures(int type) {
 		switch (type) {
 		case 0:
 			return getTexturesPlain();
@@ -153,7 +153,7 @@ public class Tesselator {
 		// TODO Textura mapping...
 		
 		return textures;
-	}
+	}*/
 	
 	/** Colors **/
 	
@@ -191,8 +191,8 @@ public class Tesselator {
 	private List<Float> getColorsPlain() {
 		ArrayList<Float> colors = new ArrayList<Float>();
 		
-		Random random = new Random();
-		float rand = random.nextFloat() / 10.0f;
+		//Random random = new Random();
+		float rand = 2.0f / 10.0f;
 		
 		float red = rand;
 		float green = rand + 0.4f;
@@ -206,8 +206,8 @@ public class Tesselator {
 	private List<Float> getColorsMountain() {
 		ArrayList<Float> colors = new ArrayList<Float>();
 		
-		Random random = new Random();
-		float rand = random.nextFloat() / 10.0f;
+		//Random random = new Random();
+		float rand = 2.0f / 10.0f;
 		
 		float red = rand + 0.4f;
 		float green = rand;

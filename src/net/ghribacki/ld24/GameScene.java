@@ -1,26 +1,24 @@
 package net.ghribacki.ld24;
 
-import java.nio.FloatBuffer;
-
+import net.ghribacki.ld24.entity.Starship;
 import net.ghribacki.ld24.world.Terrain;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import sun.font.CreatedFontTracker;
-
 public class GameScene extends Scene {
-	private Terrain terrain;
+	private Shader shader;
 	
-	private double round = 0.0;
-	private double round2 = 0.0;
+	private Terrain terrain;
+	private Camera cam;
+	private Starship player;
 
 	public GameScene(Game game) {
 		super(game);
 
-		this.terrain = new Terrain(1);
+		this.terrain = new Terrain(2);
+		this.cam = new Camera();
+		this.player = new Starship(16, 0.1f, 16);
 	}
 
 	@Override
@@ -39,18 +37,16 @@ public class GameScene extends Scene {
         
         // Really Nice Perspective Calculations.
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_FASTEST);
-        
-        // Shader test...
-        int i = ARBShaderObjects.glCreateProgramObjectARB();
-        int v;
-        if (i != 0) {
-        	v = ARBShaderObjects.glCreateShaderObjectARB(35633);
-        }
+		
+		// Load shaders...
+		this.shader = new Shader();
 	}
 
 	@Override
 	public void update() {
 		this.terrain.update();
+		this.player.update();
+		this.cam.update(this.player);
 	}
 
 	@Override
@@ -58,26 +54,16 @@ public class GameScene extends Scene {
 		this.setup3D();
 		
 		GL11.glPushMatrix();
-
-		GL11.glTranslated(0, 0, -10);
-		GL11.glRotated(35.264, 1, 0, 0);
-		//GL11.glRotated(45, 0, 1, 0);
-		//GL11.glRotated(round, 1, 0, 0);
-		GL11.glRotated(round2, 0, 1, 0);
-		GL11.glTranslated(-16, 0, -24);
+		
+		this.shader.beginShaderProgram();
+		
+		this.cam.lookThrough();
+		
 		this.terrain.render();
 		
-		if (round < 360.0) {
-			round += 0.25;
-		} else {
-			round = 0.0;
-		}
+		this.player.render();
 		
-		if (round2 < 360.0) {
-			round2 += 0.25;
-		} else {
-			round2 = 0.0;
-		}
+		this.shader.endShaderProgram();
 		
 		GL11.glPopMatrix();
 	}

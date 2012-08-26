@@ -1,7 +1,7 @@
 varying vec4 color;
 
-const float WORLD_RADIUS         = 75.0;
-const float WORLD_RADIUS_SQUARED = 5625.0;
+const float WORLD_RADIUS         = 50.0;
+const float WORLD_RADIUS_SQUARED = 2500.0;
 
 
 void main() {
