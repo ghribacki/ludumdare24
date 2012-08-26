@@ -27,7 +27,7 @@ public class Chunk {
 		Random random = new Random();
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				this.cells[i][j] = random.nextInt(3);
+				this.cells[i][j] = random.nextInt(2);
 			}
 		}
 		this.modified = true;

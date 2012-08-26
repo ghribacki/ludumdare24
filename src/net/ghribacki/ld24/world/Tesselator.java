@@ -195,8 +195,8 @@ public class Tesselator {
 		float rand = random.nextFloat() / 10.0f;
 		
 		float red = rand;
-		float green = rand;
-		float blue = rand + 0.25f;
+		float green = rand + 0.4f;
+		float blue = rand;
 		
 		colors.addAll(this.getVertexColor(red, green, blue));
 		
@@ -209,15 +209,15 @@ public class Tesselator {
 		Random random = new Random();
 		float rand = random.nextFloat() / 10.0f;
 		
-		float red = rand + 0.25f;
+		float red = rand + 0.4f;
 		float green = rand;
 		float blue = rand;
 		
-		colors.addAll(this.getVertexColor(red, green, blue));
+		colors.addAll(this.getVertexColor(red+0.075f, green, blue));
 		colors.addAll(this.getVertexColor(red+0.05f, green, blue));
-		colors.addAll(this.getVertexColor(red-0.05f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.025f, green, blue));
 		colors.addAll(this.getVertexColor(red+0.05f, green, blue));
-		colors.addAll(this.getVertexColor(red-0.05f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.025f, green, blue));
 		
 		return colors;
 	}
@@ -229,14 +229,14 @@ public class Tesselator {
 		float rand = random.nextFloat() / 10.0f;
 		
 		float red = rand;
-		float green = rand + 0.25f;
-		float blue = rand;
-
-		colors.addAll(this.getVertexColor(red, green, blue));
-		colors.addAll(this.getVertexColor(red, green+0.1f, blue));
-		colors.addAll(this.getVertexColor(red, green-0.1f, blue));
-		colors.addAll(this.getVertexColor(red, green+0.1f, blue));
-		colors.addAll(this.getVertexColor(red, green-0.1f, blue));
+		float green = rand;
+		float blue = rand + 0.4f;
+		
+		colors.addAll(this.getVertexColor(red+0.075f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.05f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.025f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.05f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.025f, green, blue));
 		
 		return colors;
 	}

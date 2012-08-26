@@ -1,9 +1,15 @@
 package net.ghribacki.ld24;
 
+import java.nio.FloatBuffer;
+
 import net.ghribacki.ld24.world.Terrain;
 
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
+
+import sun.font.CreatedFontTracker;
 
 public class GameScene extends Scene {
 	private Terrain terrain;
@@ -33,6 +39,13 @@ public class GameScene extends Scene {
         
         // Really Nice Perspective Calculations.
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_FASTEST);
+        
+        // Shader test...
+        int i = ARBShaderObjects.glCreateProgramObjectARB();
+        int v;
+        if (i != 0) {
+        	v = ARBShaderObjects.glCreateShaderObjectARB(35633);
+        }
 	}
 
 	@Override
@@ -51,7 +64,7 @@ public class GameScene extends Scene {
 		//GL11.glRotated(45, 0, 1, 0);
 		//GL11.glRotated(round, 1, 0, 0);
 		GL11.glRotated(round2, 0, 1, 0);
-		GL11.glTranslated(-10, 0, -10);
+		GL11.glTranslated(-16, 0, -24);
 		this.terrain.render();
 		
 		if (round < 360.0) {
