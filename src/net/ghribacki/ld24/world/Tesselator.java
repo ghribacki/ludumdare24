@@ -5,6 +5,41 @@ import java.util.List;
 import java.util.Random;
 
 public class Tesselator {
+	private float red;
+	private float green;
+	private float blue;
+	
+	public Tesselator() {
+		// Decide planet's color!
+		Random random = new Random();
+		this.red = 0.0f;
+		this.green = 0.0f;
+		this.blue = 0.0f;
+		
+		switch (random.nextInt(6)) {
+			case 0:
+				this.red += 0.2f;
+				break;
+			case 1:
+				this.green += 0.2f;
+				break;
+			case 2:
+				this.blue += 0.2f;
+				break;
+			case 3:
+				this.red += 0.2f;
+				this.green += 0.2f;
+				break;
+			case 4:
+				this.red += 0.2f;
+				this.blue += 0.2f;
+				break;
+			case 5:
+				this.green += 0.2f;
+				this.blue += 0.2f;
+				break;
+		}
+	}
 	
 	/** Vertices **/
 	
@@ -195,9 +230,9 @@ public class Tesselator {
 		float rand = random.nextFloat() / 5.0f;
 		//float rand = 2.0f / 10.0f;
 		
-		float red = rand + 0.4f;
-		float green = rand;
-		float blue = rand;
+		float red = rand + (this.red*2);
+		float green = rand + this.green;
+		float blue = rand + this.blue;
 		
 		colors.addAll(this.getVertexColor(red, green, blue));
 		
@@ -211,9 +246,9 @@ public class Tesselator {
 		float rand = random.nextFloat() / 10.0f;
 		//float rand = 1.0f / 10.0f;
 		
-		float red = rand + 0.2f;
-		float green = rand;
-		float blue = rand;
+		float red = rand + this.red;
+		float green = rand + this.green;
+		float blue = rand + this.blue;
 		
 		colors.addAll(this.getVertexColor(red+0.075f, green, blue));
 		colors.addAll(this.getVertexColor(red+0.05f, green, blue));

@@ -15,10 +15,12 @@ public class Terrain {
 	public Terrain(int size) {
 		this.size = size;
 		
+		Tesselator tesselator = new Tesselator();
+		
 		this.map = new Chunk[size][size];
 		for (int i = 0; i < size; i++) {
 			for (int j = 0; j < size; j++) {
-				this.map[i][j] = new Chunk(32);
+				this.map[i][j] = new Chunk(tesselator, 32);
 			}
 		}
 		
@@ -54,6 +56,22 @@ public class Terrain {
 	
 	public void setCell(int xc, int yc, int x, int y, int type) {
 		this.map[xc][yc].setCell(x, y, type);
+	}
+	
+	public void setCell(int x, int y, int type) {
+		int xc = (int)Math.floor(x / 32.0f);
+		int yc = (int)Math.floor(y / 32.0f);
+		int cellX = (int)Math.floor(x) % 32;
+		int cellY = (int)Math.floor(y) % 32;
+		this.map[xc][yc].setCell(cellX, cellY, type);
+	}
+	
+	public int getCell(int x, int y) {
+		int xc = (int)Math.floor(x / 32.0f);
+		int yc = (int)Math.floor(y / 32.0f);
+		int cellX = (int)Math.floor(x) % 32;
+		int cellY = (int)Math.floor(y) % 32;
+		return this.map[xc][yc].getCell(cellX, cellY);
 	}
 	
 	public int getSize() {

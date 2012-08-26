@@ -20,9 +20,13 @@ public class Chunk {
 	private int colors;
 	private int count;
 	
-	public Chunk(int size) {
+	private Tesselator tesselator;
+	
+	public Chunk(Tesselator tesselator, int size) {
 		this.size = size;
 		this.cells = new int[size][size];
+		
+		this.tesselator = tesselator;
 		
 		Random random = new Random();
 		for (int i = 0; i < size; i++) {
@@ -73,9 +77,7 @@ public class Chunk {
 		GL11.glDisableClientState(GL11.GL_COLOR_ARRAY);
 	}
 	
-	private void compile() {
-		Tesselator tesselator = new Tesselator();
-		
+	private void compile() {		
 		ArrayList<Float> verticesList = new ArrayList<Float>();
 		//ArrayList<Float> texturesList = new ArrayList<Float>();
 		ArrayList<Float> colorsList = new ArrayList<Float>();
@@ -145,5 +147,9 @@ public class Chunk {
 	public void setCell(int x, int y, int type) {
 		this.cells[x][y] = type;
 		this.modified = true;
+	}
+
+	public int getCell(int x, int y) {
+		return this.cells[x][y];
 	}
 }

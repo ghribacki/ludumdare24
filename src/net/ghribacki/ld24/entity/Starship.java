@@ -10,15 +10,21 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class Starship extends Entity {
+	private final int CONTROL_MODE = 0;
+	
 	private float yaw = 135.0f;
 	
-	private float movementSpeed = 6.0f; // Move 10 units per second.
+	private float movementSpeed = 0.0f; // Move 10 units per second.
 	private float dt = 0.0f; // Length of time.
 	private float dx = 0.0f;
 	//private float dy = 0.0f;
 	private float lastTime = 0.0f; // When the last frame was.
 	private float time = 0.0f;
 	private float mouseSensibility = 0.1f;
+
+	private float maxSpeed = 10.0f;
+	private float acceleration = 0.1f;
+	private float deacceleration = 0.05f;
 	
 	private List<Entity> entities;
 	private int pewTimer;
@@ -31,14 +37,9 @@ public class Starship extends Entity {
 		this.yaw +=	amount;
 	}
 	
-	private void walkForward(float distance) {
+	private void moveForward(float distance) {
 		this.position.x -= distance * (float)Math.cos(Math.toRadians(yaw));
 		this.position.z += distance * (float)Math.sin(Math.toRadians(yaw));
-	}
-	
-	private void walkBackwards(float distance) {
-		this.position.x += distance * (float)Math.cos(Math.toRadians(yaw));
-		this.position.z -= distance * (float)Math.sin(Math.toRadians(yaw));
 	}
 	
 	private void rotate(float amount) {
@@ -51,23 +52,60 @@ public class Starship extends Entity {
 		this.dt = (this.time - this.lastTime)/1000.0f;
 		this.lastTime = this.time;
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			this.rotate(25.0f);
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			this.rotate(-25.0f);
+		boolean forward = false;
+		boolean backward = false;
+		boolean shoot = false;
+		
+		if (this.CONTROL_MODE == 0) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
+				forward = true;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
+				backward = true;
+			}
+			if (Mouse.isButtonDown(0)) {
+				shoot = true;
+			}
+			
+			this.yaw = ((float) Math.toDegrees(Math.atan2(Mouse.getY()-195.0f, Mouse.getX()-408.0f))) + 45.0f;
+			// 406, 195 (screen 2d position of the ship).
+		} else {
+			if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+				forward = true;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+				backward = true;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+				shoot = true;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+				this.rotate(25.0f);
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+				this.rotate(-25.0f);
+			}
 		}
 		
-		//this.yaw(this.dx * this.mouseSensibility);
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			this.walkForward(this.movementSpeed * this.dt);
+		if (forward) {
+			if (this.movementSpeed < this.maxSpeed) {
+				this.movementSpeed += this.acceleration;
+			}
+		} else if (backward) {
+			if (this.movementSpeed > -this.maxSpeed) {
+				this.movementSpeed -= this.acceleration;
+			}
+		} else {
+			if (this.movementSpeed > 0) {
+				this.movementSpeed -= this.deacceleration;
+			} else if (this.movementSpeed < 0) {
+				this.movementSpeed += this.deacceleration;
+			}
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-			this.walkBackwards(this.movementSpeed * this.dt);
-		}
+		this.moveForward(this.movementSpeed * this.dt);
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) && (this.pewTimer == 0)) {
+		if (shoot && (this.pewTimer == 0)) {
 			this.entities.add(new PewPew(this.yaw, this.position.x, this.position.y-0.01f, this.position.z));
 			this.pewTimer = 15;
 		}
@@ -76,18 +114,15 @@ public class Starship extends Entity {
 			this.pewTimer--;
 		}
 		
-		//this.yaw = ((float) Math.toDegrees(Math.atan2(Mouse.getY()-195.0f, Mouse.getX()-408.0f))) + 45.0f;
-		// 406, 195 (screen 2d position of the ship).
-		
-		if (this.position.x > 96) {
+		if (this.position.x > 64) {
 			this.position.x = 32;
 		} else if (this.position.x < 32) {
-			this.position.x = 96;
+			this.position.x = 64;
 		}
-		if (this.position.z > 96) {
+		if (this.position.z > 64) {
 			this.position.z = 32;
 		} else if (this.position.z < 32) {
-			this.position.z = 96;
+			this.position.z = 64;
 		}
 	}
 

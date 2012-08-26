@@ -9,6 +9,7 @@ import net.ghribacki.ld24.entity.Starship;
 import net.ghribacki.ld24.world.Terrain;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -25,7 +26,7 @@ public class GameScene extends Scene {
 	public GameScene(Game game) {
 		super(game);
 
-		this.terrain = new Terrain(2);
+		this.terrain = new Terrain(1);
 		this.cam = new Camera();
 		this.player = new Starship(16, 0.6f, 16);
 		
@@ -39,10 +40,10 @@ public class GameScene extends Scene {
 		GL11.glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 		GL11.glClearDepth(1.0); // Depth Buffer Setup
         
-        GL11.glEnable(GL11.GL_BLEND);
+        /*GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glAlphaFunc(GL11.GL_NOTEQUAL, GL11.GL_ZERO);
+        GL11.glAlphaFunc(GL11.GL_NOTEQUAL, GL11.GL_ZERO);*/
         
         GL11.glEnable(GL11.GL_CULL_FACE);
         
@@ -50,7 +51,7 @@ public class GameScene extends Scene {
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_FASTEST);
 		
         // Light test!
-        GL11.glShadeModel(GL11.GL_FLAT);
+        //GL11.glShadeModel(GL11.GL_SMOOTH);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_LIGHT0);
         GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[] {0.3f, 0.3f, 0.3f, 1f}));
@@ -72,6 +73,10 @@ public class GameScene extends Scene {
 
 	@Override
 	public void update() {
+		if (Keyboard.isKeyDown(Keyboard.KEY_F2)) {
+			this.game.setScene(new GameScene(this.game));
+		}
+		
 		this.terrain.update();
 		this.player.update();
 		this.cam.update(this.player);
@@ -110,8 +115,7 @@ public class GameScene extends Scene {
 
 	@Override
 	public void destroy() {
-		// TODO Auto-generated method stub
-		
+		this.shader.clear();		
 	}
 
 	private void setup3D() {

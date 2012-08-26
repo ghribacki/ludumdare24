@@ -69,6 +69,9 @@ public class Game extends Canvas implements Runnable {
 	}
 	
 	public void setScene(Scene scene) {
+		if (this.scene != null) {
+			this.scene.destroy();
+		}
 		this.scene = scene;
 		this.scene.init();
 	}
