@@ -15,17 +15,19 @@ public class Evolution implements Runnable {
 	public void run() {
 		while (true) {
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(500);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
-			int i = this.random.nextInt(32);
-			int j = this.random.nextInt(32);
-			
-			int type = this.random.nextInt(2);
-			
-			terrain.setCell(i, j, type);
+			for (int i = 0; i < this.terrain.getSize(); i++) {
+				for (int j = 0; j < this.terrain.getSize(); j++) {
+					int x = this.random.nextInt(32);
+					int y = this.random.nextInt(32);
+					int type = this.random.nextInt(2);
+					this.terrain.setCell(i, j, x, y, type);
+				}
+			}
 		}
 	}
 

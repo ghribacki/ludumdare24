@@ -30,25 +30,33 @@ public class Terrain {
 		// TODO Game of life thread!
 	}
 	
-	public void render() {
-		this.renderChunks();
+	public void render(float x, float y) {
+		GL11.glPushMatrix();
+		this.renderChunks(x, y);
+		GL11.glPopMatrix();
 	}
 	
-	private void renderChunks() {
-		for (int i = 0; i < this.size; i++) {
+	private void renderChunks(float x, float y) {		
+		for (int i = 0; i < this.size+2; i++) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(i*32.0f, 0.0f, 0.0f);
-			for (int j = 0; j < this.size; j++) {
+			for (int j = 0; j < this.size+2; j++) {
 				GL11.glPushMatrix();
 				GL11.glTranslatef(0.0f, 0.0f, j*32.0f);
-				this.map[i][j].render();
+				int i1 = i % this.size;
+				int j1 = j % this.size;
+				this.map[i1][j1].render();
 				GL11.glPopMatrix();
 			}
 			GL11.glPopMatrix();
 		}
 	}
 	
-	public void setCell(int x, int y, int type) {
-		this.map[0][0].setCell(x, y, type);
+	public void setCell(int xc, int yc, int x, int y, int type) {
+		this.map[xc][yc].setCell(x, y, type);
+	}
+	
+	public int getSize() {
+		return this.size;
 	}
 }

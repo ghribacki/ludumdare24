@@ -1,8 +1,14 @@
 package net.ghribacki.ld24;
 
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.List;
+
+import net.ghribacki.ld24.entity.Entity;
 import net.ghribacki.ld24.entity.Starship;
 import net.ghribacki.ld24.world.Terrain;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -12,20 +18,25 @@ public class GameScene extends Scene {
 	private Terrain terrain;
 	private Camera cam;
 	private Starship player;
+	private List<Entity> entities;
+	
+	private int cleanTimer;
 
 	public GameScene(Game game) {
 		super(game);
 
 		this.terrain = new Terrain(2);
 		this.cam = new Camera();
-		this.player = new Starship(16, 0.1f, 16);
+		this.player = new Starship(16, 0.6f, 16);
+		
+		this.entities = new ArrayList<Entity>();
+		this.player.setPewSpawn(this.entities);
 	}
 
 	@Override
 	public void init() {
 		//GL11.glEnable(GL11.GL_TEXTURE_2D); // Enable Texture Mapping
-		//GL11.glClearColor(0.53f, 0.8f, 1.0f, 0.0f); // Cyan Background
-		GL11.glClearColor(0.1f, 0.1f, 0.2f, 1.0f); // Black Background
+		GL11.glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 		GL11.glClearDepth(1.0); // Depth Buffer Setup
         
         GL11.glEnable(GL11.GL_BLEND);
@@ -38,8 +49,25 @@ public class GameScene extends Scene {
         // Really Nice Perspective Calculations.
         GL11.glHint(GL11.GL_PERSPECTIVE_CORRECTION_HINT, GL11.GL_FASTEST);
 		
+        // Light test!
+        GL11.glShadeModel(GL11.GL_FLAT);
+        GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_LIGHT0);
+        GL11.glLightModel(GL11.GL_LIGHT_MODEL_AMBIENT, asFloatBuffer(new float[] {0.3f, 0.3f, 0.3f, 1f}));
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, asFloatBuffer(new float[] {0.7f, 0.7f, 0.7f, 1f}));
+        //GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, asFloatBuffer(new float[] {0.7f, 0.7f, 0.7f, 1f}));
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+        GL11.glColorMaterial(GL11.GL_FRONT, GL11.GL_DIFFUSE);
+        
 		// Load shaders...
 		this.shader = new Shader();
+	}
+	
+	public static FloatBuffer asFloatBuffer(float[] values) {
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(values.length);
+		buffer.put(values);
+		buffer.flip();
+		return buffer;
 	}
 
 	@Override
@@ -47,6 +75,14 @@ public class GameScene extends Scene {
 		this.terrain.update();
 		this.player.update();
 		this.cam.update(this.player);
+		for (Entity entity : this.entities) {
+			entity.update();
+		}
+		this.cleanTimer++;
+		if (this.cleanTimer == 60) {
+			this.cleanEntities();
+			this.cleanTimer = 0;
+		}
 	}
 
 	@Override
@@ -59,9 +95,13 @@ public class GameScene extends Scene {
 		
 		this.cam.lookThrough();
 		
-		this.terrain.render();
+		this.terrain.render(this.player.position.x, this.player.position.z);
 		
 		this.player.render();
+		
+		for (Entity entity : this.entities) {
+			entity.render();
+		}
 		
 		this.shader.endShaderProgram();
 		
@@ -86,11 +126,22 @@ public class GameScene extends Scene {
           30.0f,
           (float) this.game.getWidth() / (float) this.game.getHeight(),
           0.1f,
-          300.0f);
+          64.0f);
         GL11.glMatrixMode(GL11.GL_MODELVIEW); // Select The Modelview Matrix
         
 		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glLoadIdentity();
 	}
 
+	public void cleanEntities() {
+		List<Entity> entityTemp = new ArrayList<Entity>();
+		entityTemp.addAll(this.entities);
+		this.entities.clear();
+		
+		for (Entity entity : entityTemp) {
+			if (entity.isAlive()) {
+				this.entities.add(entity);
+			}
+		}
+	}
 }

@@ -96,11 +96,11 @@ public class Tesselator {
 	private List<Float> getVerticesMountain(int x, int y) {
 		ArrayList<Float> quad = new ArrayList<Float>();
 		
-		quad.addAll(this.getPlain(x+0.1f, 0.2f, y+0.1f, 0.9f + x, 0.2f, 0.9f + y));
-		quad.addAll(this.getNorthSlope(x, y, 0.0f, 0.2f));
-		quad.addAll(this.getEastSlope(x, y, 0.0f, 0.2f));
-		quad.addAll(this.getSouthSlope(x, y, 0.0f, 0.2f));
-		quad.addAll(this.getWestSlope(x, y, 0.0f, 0.2f));
+		quad.addAll(this.getPlain(x+0.1f, 0.4f, y+0.1f, 0.9f + x, 0.4f, 0.9f + y));
+		quad.addAll(this.getNorthSlope(x, y, 0.0f, 0.4f));
+		quad.addAll(this.getEastSlope(x, y, 0.0f, 0.4f));
+		quad.addAll(this.getSouthSlope(x, y, 0.0f, 0.4f));
+		quad.addAll(this.getWestSlope(x, y, 0.0f, 0.4f));
 		
 		return quad;
 	}
@@ -190,12 +190,13 @@ public class Tesselator {
 	
 	private List<Float> getColorsPlain() {
 		ArrayList<Float> colors = new ArrayList<Float>();
+
+		Random random = new Random();
+		float rand = random.nextFloat() / 5.0f;
+		//float rand = 2.0f / 10.0f;
 		
-		//Random random = new Random();
-		float rand = 2.0f / 10.0f;
-		
-		float red = rand;
-		float green = rand + 0.4f;
+		float red = rand + 0.4f;
+		float green = rand;
 		float blue = rand;
 		
 		colors.addAll(this.getVertexColor(red, green, blue));
@@ -206,10 +207,11 @@ public class Tesselator {
 	private List<Float> getColorsMountain() {
 		ArrayList<Float> colors = new ArrayList<Float>();
 		
-		//Random random = new Random();
-		float rand = 2.0f / 10.0f;
+		Random random = new Random();
+		float rand = random.nextFloat() / 10.0f;
+		//float rand = 1.0f / 10.0f;
 		
-		float red = rand + 0.4f;
+		float red = rand + 0.2f;
 		float green = rand;
 		float blue = rand;
 		
