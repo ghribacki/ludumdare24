@@ -15,7 +15,7 @@ public class Game extends Canvas implements Runnable {
 	
 	public static final String TITLE = "Living Worlds";
 	public static final int WIDTH = 800;
-	public static final int HEIGHT = 500;
+	public static final int HEIGHT = 600;
 	public static final int SCALE = 1;
 	
 	private boolean running;

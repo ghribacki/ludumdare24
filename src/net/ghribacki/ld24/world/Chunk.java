@@ -2,6 +2,7 @@ package net.ghribacki.ld24.world;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBVertexBufferObject;
@@ -22,6 +23,13 @@ public class Chunk {
 	public Chunk(int size) {
 		this.size = size;
 		this.cells = new int[size][size];
+		
+		Random random = new Random();
+		for (int i = 0; i < size; i++) {
+			for (int j = 0; j < size; j++) {
+				this.cells[i][j] = random.nextInt(3);
+			}
+		}
 		this.modified = true;
 	}
 	

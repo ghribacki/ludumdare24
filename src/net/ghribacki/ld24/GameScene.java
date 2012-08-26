@@ -7,6 +7,9 @@ import org.lwjgl.util.glu.GLU;
 
 public class GameScene extends Scene {
 	private Terrain terrain;
+	
+	private double round = 0.0;
+	private double round2 = 0.0;
 
 	public GameScene(Game game) {
 		super(game);
@@ -43,11 +46,25 @@ public class GameScene extends Scene {
 		
 		GL11.glPushMatrix();
 
-		GL11.glTranslated(0, 0, -25);
+		GL11.glTranslated(0, 0, -10);
 		GL11.glRotated(35.264, 1, 0, 0);
-		GL11.glRotated(45, 0, 1, 0);
+		//GL11.glRotated(45, 0, 1, 0);
+		//GL11.glRotated(round, 1, 0, 0);
+		GL11.glRotated(round2, 0, 1, 0);
 		GL11.glTranslated(-10, 0, -10);
 		this.terrain.render();
+		
+		if (round < 360.0) {
+			round += 0.25;
+		} else {
+			round = 0.0;
+		}
+		
+		if (round2 < 360.0) {
+			round2 += 0.25;
+		} else {
+			round2 = 0.0;
+		}
 		
 		GL11.glPopMatrix();
 	}
