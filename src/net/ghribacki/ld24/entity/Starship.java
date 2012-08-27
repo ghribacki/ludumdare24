@@ -1,8 +1,7 @@
 package net.ghribacki.ld24.entity;
 
-import java.util.List;
-
 import net.ghribacki.ld24.GameScene;
+import net.ghribacki.ld24.world.Planet;
 
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
@@ -16,21 +15,19 @@ public class Starship extends Entity {
 	
 	private float movementSpeed = 0.0f; // Move 10 units per second.
 	private float dt = 0.0f; // Length of time.
-	private float dx = 0.0f;
+	//private float dx = 0.0f;
 	//private float dy = 0.0f;
 	private float lastTime = 0.0f; // When the last frame was.
 	private float time = 0.0f;
 	private float mouseSensibility = 0.1f;
 
-	private float maxSpeed = 10.0f;
+	private float maxSpeed = 6.0f;
 	private float acceleration = 0.1f;
-	private float deacceleration = 0.05f;
-	
-	private List<Entity> entities;
+	private float deacceleration = 0.1f;
 	private int pewTimer;
 
-	public Starship(float x, float y, float z) {
-		super(x, y, z);
+	public Starship(Planet planet, float x, float y, float z) {
+		super(planet, x, y, z);
 	}
 	
 	public void yaw(float amount) {
@@ -99,14 +96,21 @@ public class Starship extends Entity {
 		} else {
 			if (this.movementSpeed > 0) {
 				this.movementSpeed -= this.deacceleration;
+				if (this.movementSpeed < 0) {
+					this.movementSpeed = 0;
+				}
 			} else if (this.movementSpeed < 0) {
 				this.movementSpeed += this.deacceleration;
+				if (this.movementSpeed > 0) {
+					this.movementSpeed = 0;
+				}
 			}
 		}
+		
 		this.moveForward(this.movementSpeed * this.dt);
 		
 		if (shoot && (this.pewTimer == 0)) {
-			this.entities.add(new PewPew(this.yaw, this.position.x, this.position.y-0.01f, this.position.z));
+			this.planet.addEntity(new PewPew(this.planet, this.position.x, this.position.y-0.05f, this.position.z, this.yaw, false));
 			this.pewTimer = 15;
 		}
 		
@@ -114,15 +118,15 @@ public class Starship extends Entity {
 			this.pewTimer--;
 		}
 		
-		if (this.position.x > 64) {
+		if (this.position.x >= 32) {
+			this.position.x = 0;
+		} else if (this.position.x < 0) {
 			this.position.x = 32;
-		} else if (this.position.x < 32) {
-			this.position.x = 64;
 		}
-		if (this.position.z > 64) {
+		if (this.position.z >= 32) {
+			this.position.z = 0;
+		} else if (this.position.z < 0) {
 			this.position.z = 32;
-		} else if (this.position.z < 32) {
-			this.position.z = 64;
 		}
 	}
 
@@ -146,13 +150,9 @@ public class Starship extends Entity {
 			GL11.glVertex3f(-0.2f, 0.0f, -0.15f);
 		GL11.glEnd();
 
-        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, GameScene.asFloatBuffer(new float[] {5, 8f, 0, 1}));
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, GameScene.asFloatBuffer(new float[] {5, 10f, 0, 1}));
 		
 		GL11.glPopMatrix();
-	}
-
-	public void setPewSpawn(List<Entity> entities) {
-		this.entities = entities;
 	}
 
 }

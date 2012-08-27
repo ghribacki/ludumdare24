@@ -1,12 +1,13 @@
 package net.ghribacki.ld24;
 
 import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
-import net.ghribacki.ld24.entity.Entity;
+import net.ghribacki.ld24.entity.PewPew;
+import net.ghribacki.ld24.entity.ShootingStar;
 import net.ghribacki.ld24.entity.Starship;
-import net.ghribacki.ld24.world.Terrain;
+import net.ghribacki.ld24.entity.Turret;
+import net.ghribacki.ld24.stuff.GradientBackground;
+import net.ghribacki.ld24.world.Planet;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.input.Keyboard;
@@ -16,22 +17,20 @@ import org.lwjgl.util.glu.GLU;
 public class GameScene extends Scene {
 	private Shader shader;
 	
-	private Terrain terrain;
+	private Planet planet;
 	private Camera cam;
 	private Starship player;
-	private List<Entity> entities;
 	
-	private int cleanTimer;
+	private GradientBackground bg;
 
 	public GameScene(Game game) {
 		super(game);
 
-		this.terrain = new Terrain(1);
+		this.planet = new Planet(1);
 		this.cam = new Camera();
-		this.player = new Starship(16, 0.6f, 16);
+		this.player = new Starship(this.planet, 16, 0.2f, 16);
 		
-		this.entities = new ArrayList<Entity>();
-		this.player.setPewSpawn(this.entities);
+		this.bg = new GradientBackground(0.4f, 0.4f, 0.8f, 0.0f, 0.0f, 0.1f);
 	}
 
 	@Override
@@ -40,10 +39,10 @@ public class GameScene extends Scene {
 		GL11.glClearColor(0.1f, 0.1f, 0.2f, 1.0f);
 		GL11.glClearDepth(1.0); // Depth Buffer Setup
         
-        /*GL11.glEnable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         GL11.glEnable(GL11.GL_ALPHA_TEST);
-        GL11.glAlphaFunc(GL11.GL_NOTEQUAL, GL11.GL_ZERO);*/
+        GL11.glAlphaFunc(GL11.GL_NOTEQUAL, GL11.GL_ZERO);
         
         GL11.glEnable(GL11.GL_CULL_FACE);
         
@@ -62,6 +61,12 @@ public class GameScene extends Scene {
         
 		// Load shaders...
 		this.shader = new Shader();
+		
+		this.planet.init();
+		
+		Turret.compile();
+		ShootingStar.compile();
+		PewPew.compile();
 	}
 	
 	public static FloatBuffer asFloatBuffer(float[] values) {
@@ -77,21 +82,18 @@ public class GameScene extends Scene {
 			this.game.setScene(new GameScene(this.game));
 		}
 		
-		this.terrain.update();
+		this.planet.update();
 		this.player.update();
 		this.cam.update(this.player);
-		for (Entity entity : this.entities) {
-			entity.update();
-		}
-		this.cleanTimer++;
-		if (this.cleanTimer == 60) {
-			this.cleanEntities();
-			this.cleanTimer = 0;
-		}
+		this.bg.update();
 	}
 
 	@Override
 	public void render() {
+		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+		
+		this.bg.render();
+
 		this.setup3D();
 		
 		GL11.glPushMatrix();
@@ -100,13 +102,9 @@ public class GameScene extends Scene {
 		
 		this.cam.lookThrough();
 		
-		this.terrain.render(this.player.position.x, this.player.position.z);
+		this.planet.render(this.player.position.x, this.player.position.z);
 		
 		this.player.render();
-		
-		for (Entity entity : this.entities) {
-			entity.render();
-		}
 		
 		this.shader.endShaderProgram();
 		
@@ -133,19 +131,7 @@ public class GameScene extends Scene {
           64.0f);
         GL11.glMatrixMode(GL11.GL_MODELVIEW); // Select The Modelview Matrix
         
-		GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
 		GL11.glLoadIdentity();
-	}
-
-	public void cleanEntities() {
-		List<Entity> entityTemp = new ArrayList<Entity>();
-		entityTemp.addAll(this.entities);
-		this.entities.clear();
-		
-		for (Entity entity : entityTemp) {
-			if (entity.isAlive()) {
-				this.entities.add(entity);
-			}
-		}
 	}
 }

@@ -115,7 +115,8 @@ public class Tesselator {
 		case 1:
 			return getVerticesMountain(x, y);
 		case 2:
-			return getVerticesWater(x, y);
+			return getVerticesMountain(x, y);
+			//return getVerticesWater(x, y);
 		}
 		return null;
 	}
@@ -140,7 +141,7 @@ public class Tesselator {
 		return quad;
 	}
 	
-	private List<Float> getVerticesWater(int x, int y) {
+	/*private List<Float> getVerticesWater(int x, int y) {
 		ArrayList<Float> quad = new ArrayList<Float>();
 
 		quad.addAll(this.getPlain(x+0.1f, -0.2f, y+0.1f, 0.9f + x, -0.2f, 0.9f + y));
@@ -150,7 +151,7 @@ public class Tesselator {
 		quad.addAll(this.getWestSlope(x, y, 0.0f, -0.2f));
 		
 		return quad;
-	}
+	}*/
 	
 	/** Textures **/
 
@@ -169,7 +170,7 @@ public class Tesselator {
 	private List<Float> getTexturesPlain() {
 		ArrayList<Float> textures = new ArrayList<Float>();
 		
-		// TODO Textura mapping...
+		// TODO Texture mapping...
 		
 		return textures;
 	}
@@ -177,7 +178,7 @@ public class Tesselator {
 	private List<Float> getTexturesMountain() {
 		ArrayList<Float> textures = new ArrayList<Float>();
 		
-		// TODO Textura mapping...
+		// TODO Texture mapping...
 		
 		return textures;
 	}
@@ -185,7 +186,7 @@ public class Tesselator {
 	private List<Float> getTexturesWater() {
 		ArrayList<Float> textures = new ArrayList<Float>();
 		
-		// TODO Textura mapping...
+		// TODO Texture mapping...
 		
 		return textures;
 	}*/
@@ -218,7 +219,8 @@ public class Tesselator {
 		case 1:
 			return getColorsMountain();
 		case 2:
-			return getColorsWater();
+			return getColorsMountainTurret();
+			//return getColorsWater();
 		}
 		return null;
 	}
@@ -227,7 +229,7 @@ public class Tesselator {
 		ArrayList<Float> colors = new ArrayList<Float>();
 
 		Random random = new Random();
-		float rand = random.nextFloat() / 5.0f;
+		float rand = (random.nextFloat() / 10.0f) + 0.25f;
 		//float rand = 2.0f / 10.0f;
 		
 		float red = rand + (this.red*2);
@@ -259,7 +261,23 @@ public class Tesselator {
 		return colors;
 	}
 	
-	private List<Float> getColorsWater() {
+	private List<Float> getColorsMountainTurret() {
+		ArrayList<Float> colors = new ArrayList<Float>();
+		
+		float red = 0.5f;
+		float green = 0.1f;
+		float blue = 0.1f;
+		
+		colors.addAll(this.getVertexColor(red+0.075f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.05f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.025f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.05f, green, blue));
+		colors.addAll(this.getVertexColor(red+0.025f, green, blue));
+		
+		return colors;
+	}
+	
+	/*private List<Float> getColorsWater() {
 		ArrayList<Float> colors = new ArrayList<Float>();
 		
 		Random random = new Random();
@@ -276,5 +294,5 @@ public class Tesselator {
 		colors.addAll(this.getVertexColor(red+0.025f, green, blue));
 		
 		return colors;
-	}
+	}*/
 }

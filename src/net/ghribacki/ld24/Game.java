@@ -84,6 +84,7 @@ public class Game extends Canvas implements Runnable {
 
 	public void stop() {
 		try {
+			this.scene.destroy();
 			this.gameThread.join();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
