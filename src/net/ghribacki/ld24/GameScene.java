@@ -10,7 +10,6 @@ import net.ghribacki.ld24.stuff.GradientBackground;
 import net.ghribacki.ld24.world.Planet;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
@@ -28,7 +27,7 @@ public class GameScene extends Scene {
 
 		this.planet = new Planet(1);
 		this.cam = new Camera();
-		this.player = new Starship(this.planet, 16, 0.2f, 16);
+		this.player = new Starship(this.planet, 16, 0.5f, 16);
 		
 		this.bg = new GradientBackground(0.4f, 0.4f, 0.8f, 0.0f, 0.0f, 0.1f);
 	}
@@ -78,10 +77,6 @@ public class GameScene extends Scene {
 
 	@Override
 	public void update() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_F2)) {
-			this.game.setScene(new GameScene(this.game));
-		}
-		
 		this.planet.update();
 		this.player.update();
 		this.cam.update(this.player);

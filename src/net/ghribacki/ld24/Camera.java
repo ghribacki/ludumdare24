@@ -23,9 +23,9 @@ public class Camera {
 		GL11.glRotatef(this.yaw, 0.0f, 1.0f, 0.0f);
 		GL11.glTranslatef(position.x, position.y, position.z);*/
 
-		GL11.glTranslated(0, 0, -12);
-		GL11.glRotated(this.pitch, 1, 0, 0);
-		GL11.glRotated(this.yaw, 0, 1, 0);
-		GL11.glTranslated(-this.position.x, -this.position.y+0.4f, -this.position.z);
+		GL11.glTranslatef(0, 0, -12);
+		GL11.glRotatef(this.pitch, 1, 0, 0);
+		GL11.glRotatef(this.yaw, 0, 1, 0);
+		GL11.glTranslatef(-this.position.x, -this.position.y+0.4f, -this.position.z);
 	}
 }

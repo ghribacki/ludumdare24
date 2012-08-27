@@ -10,11 +10,15 @@ public class Evolution implements Runnable {
 	
 	Random random;
 	
-	private final int TURRET_PROLIFERATION_RATE = 5;
+	private final int TURRET_PROLIFERATION_RATE = 2;
 	private int proliferationTimer;
 	
-	private final int COMET_RATE = 5;
+	private final int COMET_RATE = 4;
 	private int cometTimer;
+	
+	private final int TOTAL_TIME = 80;
+	private final int MEDIUM_TIME = 60;
+	private int timeTimer;
 	
 	public Evolution(Planet terrain) {
 		this.planet = terrain;
@@ -51,8 +55,12 @@ public class Evolution implements Runnable {
 						if (neighborhood == 3) {
 							this.planet.setCell(i, j, 1);
 						}
-					} else if (current > 0) {
+					} else if (current == 1) {
 						if ((neighborhood < 2) || (neighborhood > 3)) {
+							this.planet.setCell(i, j, 0);
+						}
+					} else if (current == 2) {
+						if (neighborhood < 2) {
 							this.planet.setCell(i, j, 0);
 						}
 					}
@@ -91,15 +99,21 @@ public class Evolution implements Runnable {
 			}
 			
 			this.cometTimer++;
-			if (this.cometTimer == this.COMET_RATE) {
+			if ((this.cometTimer == this.COMET_RATE) && (this.timeTimer < this.MEDIUM_TIME)) {
 				int chance = this.random.nextInt(100);
 				this.cometTimer = 0;
 				
-				if (chance < 100) {
+				if (chance < 75) {
 					int x = this.random.nextInt(32);
 					int y = this.random.nextInt(32);
 					this.planet.spawnStar(x, y);
 				}
+			}
+			
+			this.timeTimer++;
+			if (this.timeTimer == this.TOTAL_TIME) {
+				this.planet.finish();
+				break;
 			}
 		}
 	}

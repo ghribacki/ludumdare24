@@ -22,16 +22,20 @@ public class ShootingStar extends Entity {
 
 		this.position.y -= 0.1f;
 		
-		if (this.position.y < 0) {
+		if ((this.position.y < 0) && (this.position.y > -1)) {
 			int x = (int)this.position.x;
 			int y = (int)this.position.z;
-			this.planet.setCell(x, y, 1);
 			this.planet.setCell((x+32-1)%32, y, 1);
 			this.planet.setCell((x+1)%32, y, 1);
 			this.planet.setCell(x, (y+32-1)%32, 1);
 			this.planet.setCell(x, (y+1)%32, 1);
+			this.planet.setCell((x+32-1)%32, (y+32-1)%32, 1);
+			this.planet.setCell((x+1)%32, (y+1)%32, 1);
+			this.planet.setCell((x+32-1)%32, (y+1)%32, 1);
+			this.planet.setCell((x+1)%32, (y+1)%32, 1);
 			this.planet.spawnTurret(x, y);
 			this.lifeTime = 0;
+			this.position.y = -2;
 		}
 	}
 

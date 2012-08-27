@@ -18,12 +18,16 @@ public class Planet {
 	public final int CELL_MOUNTAIN = 1;
 	public final int CELL_WATER = 2;
 	
+	public boolean finished;
+	
 	public Planet(int size) {
 		this.size = size;
 		
 		Tesselator tesselator = new Tesselator();
 		
 		this.terrain = new Terrain(tesselator, 32);
+		
+		this.finished = false;
 	}
 	
 	public void init() {	
@@ -97,5 +101,14 @@ public class Planet {
 
 	public void refreshTurrets() {
 		this.terrain.refreshTurrets();
+	}
+	
+	public void finish() {
+		this.finished = true;
+		this.terrain.finish();
+	}
+	
+	public boolean isFinished() {
+		return this.finished;
 	}
 }

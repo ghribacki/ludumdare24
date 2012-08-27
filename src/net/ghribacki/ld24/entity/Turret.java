@@ -20,10 +20,10 @@ public class Turret extends Entity {
 		this.shootTimer++;
 		if (this.shootTimer == 180) {
 			this.shootTimer = 0;
-			this.planet.addEntity(new PewPew(this.planet, this.position.x, this.position.y-0.2f, this.position.z, this.yaw, true));
-			this.planet.addEntity(new PewPew(this.planet, this.position.x, this.position.y-0.2f, this.position.z, this.yaw+90, true));
-			this.planet.addEntity(new PewPew(this.planet, this.position.x, this.position.y-0.2f, this.position.z, this.yaw+180, true));
-			this.planet.addEntity(new PewPew(this.planet, this.position.x, this.position.y-0.2f, this.position.z, this.yaw+270, true));
+			//this.planet.addEntity(new PewPew(this.planet, this.position.x, this.position.y-0.2f, this.position.z, this.yaw, true));
+			//this.planet.addEntity(new PewPew(this.planet, this.position.x, this.position.y-0.2f, this.position.z, this.yaw+90, true));
+			//this.planet.addEntity(new PewPew(this.planet, this.position.x, this.position.y-0.2f, this.position.z, this.yaw+180, true));
+			//this.planet.addEntity(new PewPew(this.planet, this.position.x, this.position.y-0.2f, this.position.z, this.yaw+270, true));
 		}
 		this.yaw += 1;
 		if (this.planet.getCell((int)this.position.x, (int)this.position.z) == 0) {

@@ -51,10 +51,6 @@ public class Terrain {
 				}
 			}
 		}
-		this.setCell(15, 15, 0);
-		this.setCell(16, 15, 0);
-		this.setCell(15, 16, 0);
-		this.setCell(16, 16, 0);
 		this.refresh();
 		
 		this.entities = new ArrayList<Entity>();
@@ -181,6 +177,8 @@ public class Terrain {
 	}
 	
 	public void setCell(int x, int y, int type) {
+		x = x % 32;
+		y = y % 32;
 		this.newCells[x][y] = type;
 	}
 
@@ -235,5 +233,38 @@ public class Terrain {
 	public void refreshTurrets() {
 		this.turrets.addAll(this.newTurrets);
 		this.newTurrets.clear();
+	}
+	
+	public boolean isClean() {
+		boolean clean = true;
+		for (int i = 0; i < this.size; i++) {
+			for (int j = 0; j < this.size; j++) {
+				if (this.cells[i][j] == 2) {
+					clean = false;
+					break;
+				}
+			}
+		}
+		return clean;
+	}
+	
+	public void finish() {
+		if (this.isClean()) {
+			for (int i = 0; i < this.size; i++) {
+				for (int j = 0; j < this.size; j++) {
+					this.cells[i][j] = 1;
+				}
+			}
+		} else {
+			for (int i = 0; i < this.size; i++) {
+				for (int j = 0; j < this.size; j++) {
+					this.cells[i][j] = 2;
+				}
+			}
+		}
+		this.entities.clear();
+		this.turrets.clear();
+		this.refresh();
+		this.refreshTurrets();
 	}
 }

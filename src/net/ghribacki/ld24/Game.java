@@ -13,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 public class Game extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	
-	public static final String TITLE = "Living Worlds";
+	public static final String TITLE = "Living Worlds - Ludum Dare 24 (August 2012)";
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 600;
 	public static final int SCALE = 1;

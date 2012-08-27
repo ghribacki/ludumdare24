@@ -9,7 +9,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class Starship extends Entity {
-	private final int CONTROL_MODE = 0;
+	private int controlMode = 1;
 	
 	private float yaw = 135.0f;
 	
@@ -53,7 +53,7 @@ public class Starship extends Entity {
 		boolean backward = false;
 		boolean shoot = false;
 		
-		if (this.CONTROL_MODE == 0) {
+		if (this.controlMode == 0) {
 			if (Keyboard.isKeyDown(Keyboard.KEY_W)) {
 				forward = true;
 			}
@@ -77,11 +77,19 @@ public class Starship extends Entity {
 				shoot = true;
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-				this.rotate(25.0f);
+				this.rotate(50.0f);
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-				this.rotate(-25.0f);
+				this.rotate(-50.0f);
 			}
+		}
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_1)) {
+			this.controlMode = 1;
+		}
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_2)) {
+			this.controlMode = 0;
 		}
 		
 		
@@ -127,6 +135,10 @@ public class Starship extends Entity {
 			this.position.z = 0;
 		} else if (this.position.z < 0) {
 			this.position.z = 32;
+		}
+		
+		if (this.planet.getCell((int)this.position.x, (int)this.position.z) > 0) {
+			// TODO GAME OVER
 		}
 	}
 

@@ -16,8 +16,8 @@ public class PewPew extends Entity {
 	public PewPew(Planet planet, float x, float y, float z, float yaw, boolean enemy) {
 		super(planet, x, y, z);
 		this.yaw = yaw;
-		this.lifeTime = 80;
 		this.enemy = enemy;
+		this.lifeTime = 20;
 		
 		if (enemy) {
 			this.color = new Vector3f(1.0f, 0.0f, 0.0f);
